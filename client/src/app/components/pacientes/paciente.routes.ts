@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Routes } from '@angular/router';
 
 import { CadastrarPaciente } from './cadastrar/cadastrar-paciente';
 import { EditarPaciente } from './editar/editar-paciente';
-//import { ExcluirPaciente } from './excluir/excluir-paciente';
+import { ExcluirPaciente } from './excluir/excluir-paciente';
 import { ListarPacientes } from './listar/listar-pacientes';
 import { PacienteService } from './paciente.service';
 
@@ -39,11 +39,11 @@ export const pacienteRoutes: Routes = [
         component: EditarPaciente,
         resolve: { paciente: detalhesPacienteResolver },
       },
-      //{
-      //  path: 'excluir/:id',
-      //  component: ExcluirPaciente,
-      //  resolve: { paciente: detalhesPacienteResolver },
-      //},
+      {
+        path: 'excluir/:id',
+        component: ExcluirPaciente,
+        resolve: { paciente: detalhesPacienteResolver },
+      },
     ],
     providers: [PacienteService],
   },
