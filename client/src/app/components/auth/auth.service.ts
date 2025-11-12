@@ -34,18 +34,13 @@ export class AuthService {
   public readonly accessToken$ = merge(
     // Executa a consulta do LocalStorage apenas no browser
     defer(() => (isPlatformBrowser(this.platformId) ? of(this.obterAccessToken()) : EMPTY)),
-
-    // Combina com o resultado do LocalStorage ReplaySubject
     this.accessTokenSubject$.pipe(skip(1))
   ).pipe(
     distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
-
-    // Escreve no LocalStorage apenas quando estiver no browser
     tap((accessToken) => {
       if (!isPlatformBrowser(this.platformId)) return;
       if (accessToken) this.salvarAccessToken(accessToken);
     }),
-
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
