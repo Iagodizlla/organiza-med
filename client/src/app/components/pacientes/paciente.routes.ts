@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Routes } from '@angular/router';
 
 import { CadastrarPaciente } from './cadastrar/cadastrar-paciente';
-//import { EditarPaciente } from './editar/editar-paciente';
+import { EditarPaciente } from './editar/editar-paciente';
 //import { ExcluirPaciente } from './excluir/excluir-paciente';
 import { ListarPacientes } from './listar/listar-pacientes';
 import { PacienteService } from './paciente.service';
@@ -34,11 +34,11 @@ export const pacienteRoutes: Routes = [
         path: 'cadastrar',
         component: CadastrarPaciente,
       },
-      //{
-      //  path: 'editar/:id',
-      //  component: EditarPaciente,
-      //  resolve: { paciente: detalhesPacienteResolver },
-      //},
+      {
+        path: 'editar/:id',
+        component: EditarPaciente,
+        resolve: { paciente: detalhesPacienteResolver },
+      },
       //{
       //  path: 'excluir/:id',
       //  component: ExcluirPaciente,
