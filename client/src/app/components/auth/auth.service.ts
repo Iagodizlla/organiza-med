@@ -2,7 +2,6 @@ import {
   BehaviorSubject,
   defer,
   distinctUntilChanged,
-  EMPTY,
   map,
   merge,
   Observable,
@@ -12,7 +11,6 @@ import {
   tap,
 } from 'rxjs';
 
-import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 
@@ -31,15 +29,28 @@ export class AuthService {
     undefined
   );
 
+  public readonly accessTokenArmazenado$ = defer(() => {
+    const accessToken = this.obterAccessToken();
+
+    if (!accessToken) return of(undefined);
+
+    const valido = new Date(accessToken.expiracao) > new Date(); // DateTime.Now
+
+    if (!valido) return of(undefined);
+
+    return of(accessToken);
+  });
+
   public readonly accessToken$ = merge(
-    // Executa a consulta do LocalStorage apenas no browser
-    defer(() => (isPlatformBrowser(this.platformId) ? of(this.obterAccessToken()) : EMPTY)),
+    this.accessTokenArmazenado$,
     this.accessTokenSubject$.pipe(skip(1))
   ).pipe(
-    distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
+    distinctUntilChanged((a, b) => a === b),
     tap((accessToken) => {
-      if (!isPlatformBrowser(this.platformId)) return;
       if (accessToken) this.salvarAccessToken(accessToken);
+      else this.limparAccessToken();
+
+      this.accessTokenSubject$.next(accessToken);
     }),
     shareReplay({ bufferSize: 1, refCount: true })
   );
@@ -74,28 +85,17 @@ export class AuthService {
   }
 
   private salvarAccessToken(token: AccessTokenModel): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const jsonString = JSON.stringify(token);
-
-      localStorage.setItem(this.chaveAccessToken, jsonString);
-    }
+    const jsonString = JSON.stringify(token);
+    localStorage.setItem(this.chaveAccessToken, jsonString);
   }
 
   private limparAccessToken(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem(this.chaveAccessToken);
-    }
+    localStorage.removeItem(this.chaveAccessToken);
   }
 
   private obterAccessToken(): AccessTokenModel | undefined {
-    if (isPlatformBrowser(this.platformId)) {
-      const jsonString = localStorage.getItem(this.chaveAccessToken);
-
-      if (!jsonString) return undefined;
-
-      return JSON.parse(jsonString);
-    }
-
-    return undefined;
+    const jsonString = localStorage.getItem(this.chaveAccessToken);
+    if (!jsonString) return undefined;
+    return JSON.parse(jsonString);
   }
 }

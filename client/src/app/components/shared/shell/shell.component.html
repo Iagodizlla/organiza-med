@@ -1,4 +1,4 @@
-@if (accessToken$ | async; as accessToken) {
+
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav
     #drawer
@@ -55,11 +55,11 @@
       }
       <button mat-raised-button [matMenuTriggerFor]="opcoesUsuario" class="ml-auto">
         <mat-icon>person</mat-icon>
-        {{ accessToken.usuario.userName }}
+        {{ usuarioAutenticado.userName }}
       </button>
 
       <mat-menu #opcoesUsuario="matMenu">
-        <button mat-menu-item style="min-width: 160px" (click)="logout()">
+        <button mat-menu-item style="min-width: 160px" (click)="logoutRequisitado.emit()">
           <mat-icon>arrow_backwards</mat-icon>
           Logout
         </button>
@@ -69,10 +69,8 @@
       <path class="sidenav-svg" d="M 32,0 H -32,0 V 0,32 a 32, 32 0 0, 1 32,-32"></path>
     </svg>
 
-    <!-- Add Content Here -->
     <div class="px-4">
       <ng-content></ng-content>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-}
