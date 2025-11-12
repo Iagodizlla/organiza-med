@@ -1,0 +1,71 @@
+<section class="mx-auto max-w-4xl px-4 py-6">
+  <div>
+    <h2 class="text-2xl font-semibold">Cadastro de Paciente</h2>
+    <hr class="my-4 border-muted/30" />
+
+    <mat-card class="p-4 rounded-2xl shadow-sm">
+      <form [formGroup]="pacienteForm" (ngSubmit)="cadastrar()">
+        <mat-card-header>
+          <mat-card-title class="text-lg font-medium">
+            Preencha o formulário de cadastro
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content class="mt-6 space-y-4">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Nome do Paciente</mat-label>
+            <input formControlName="nome" matInput type="text" />
+
+            @if (nome?.errors?.['required']) {
+            <mat-error>O nome do paciente é obrigatório.</mat-error>
+            } @if (nome?.errors?.['minlength']) {
+            <mat-error>O nome do paciente deve conter no mínimo 3 caracteres.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>CPF do Paciente</mat-label>
+            <input formControlName="cpf" matInput type="text" />
+
+            @if (cpf?.errors?.['required']) {
+            <mat-error>O CPF do paciente é obrigatório.</mat-error>
+            } @if (cpf?.errors?.['pattern']) {
+            <mat-error>O CPF do paciente deve seguir o padrão 000.000.000-00.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Email do Paciente</mat-label>
+            <input formControlName="email" matInput type="text" />
+
+            @if (email?.errors?.['required']) {
+            <mat-error>O email do paciente é obrigatório.</mat-error>
+            } @if (email?.errors?.['email']) {
+            <mat-error>O email do paciente deve seguir o padrão nome@provedor.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Telefone do Paciente</mat-label>
+            <input formControlName="telefone" matInput type="text" />
+
+            @if (telefone?.errors?.['required']) {
+            <mat-error>O telefone do paciente é obrigatório.</mat-error>
+            } @if (telefone?.errors?.['pattern']) {
+            <mat-error>O telefone do paciente deve seguir o padrão (DDD) 90000-0000.</mat-error>
+            }
+          </mat-form-field>
+        </mat-card-content>
+
+        <mat-card-actions align="end" class="flex items-center justify-end gap-3 pt-4">
+          <a mat-stroked-button routerLink="/pacientes" class="px-4"> Voltar </a>
+
+          <button type="submit" [disabled]="pacienteForm.invalid" mat-flat-button class="px-6">
+            <mat-icon class="!text-base mr-1">check</mat-icon>
+            Concluir
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card>
+  </div>
+</section>
