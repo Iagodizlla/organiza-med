@@ -4,11 +4,13 @@ namespace OrganizaMed.Aplicacao.ModuloPaciente;
 
 public abstract class PacienteErrorResults
 {
-    public static Error CpfDuplicadoError(string cpf)
+    private static bool CpfDuplicado(Paciente paciente, IEnumerable<Paciente> pacientes)
     {
-        return new Error("CPF duplicado")
-            .CausedBy($"Um paciente com o CPF '{cpf}' já foi cadastrado")
-            .WithMetadata("ErrorType", "BadRequest");
+        return pacientes.Any(registro =>
+            registro.Id != paciente.Id &&
+            string.Equals(
+                registro.Cpf,
+                paciente.Cpf,
+                StringComparison.OrdinalIgnoreCase));
     }
-
 }
