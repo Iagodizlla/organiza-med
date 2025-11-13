@@ -61,10 +61,9 @@ public class EditarPacienteRequestHandler(
     private bool CpfDuplicado(Paciente paciente, IEnumerable<Paciente> pacientes)
     {
         return pacientes
-            .Any(registro => string.Equals(
-                registro.Cpf,
-                paciente.Cpf,
-                StringComparison.CurrentCultureIgnoreCase)
+            .Any(registro => 
+                !registro.Id.Equals(paciente.Id) &&
+                string.Equals(registro.Cpf, paciente.Cpf, StringComparison.CurrentCultureIgnoreCase)
             );
     }
 }
