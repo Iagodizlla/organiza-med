@@ -1,0 +1,40 @@
+@if (atividadeMedica$ | async; as atividadeMedica) {
+<section class="flex justify-center">
+  <div class="w-full max-w-screen-lg px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl font-semibold">Exclusão de Atividade Médica</h2>
+    <hr class="my-2 border-gray-200" />
+
+    <mat-card class="p-3 sm:p-4">
+      <form (ngSubmit)="excluir()" class="flex flex-col gap-4">
+        <mat-card-header class="p-0">
+          <mat-card-title class="text-base font-medium">
+            Confirme a exclusão do registro
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content class="p-0">
+          <p class="text-sm text-gray-700">
+            Você deseja realmente excluir a atividade do paciente "{{
+              atividadeMedica.paciente.nome
+            }}"? Esta ação é irreversível...
+          </p>
+        </mat-card-content>
+
+        <mat-card-actions align="end" class="mt-2 flex justify-end gap-2">
+          <a mat-stroked-button routerLink="/atividades-medicas">Voltar</a>
+
+          <button
+            type="submit"
+            mat-flat-button
+            color="primary"
+            class="inline-flex items-center gap-2 px-5"
+          >
+            <mat-icon>check</mat-icon>
+            <span>Confirmar</span>
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card>
+  </div>
+</section>
+}
