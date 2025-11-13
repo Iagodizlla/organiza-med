@@ -1,22 +1,74 @@
-import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
+
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+
+import { environment } from '../../../environments/environment';
+import { mapearRespostaApi, RespostaApiModel } from '../../util/mapear-resposta-api';
 import {
-  CadastrarAtividadeModel,
-  ListarAtividadesApiResponseModel
+  CadastrarAtividadeMedicaModel,
+  CadastrarAtividadeMedicaResponseModel,
+  DetalhesAtividadeMedicaModel,
+  EditarAtividadeMedicaModel,
+  EditarAtividadeMedicaResponseModel,
+  ListarAtividadesMedicasApiResponseModel,
+  ListarAtividadesMedicasModel,
+  TipoAtividadeMedicaEnum,
 } from './atividade-medica.models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class AtividadeMedicaService {
-  private apiUrl = 'https://localhost:7043/api/atividades-medicas';
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl + '/atividades-medicas';
 
-  constructor(private http: HttpClient) {}
-
-  listar(): Observable<ListarAtividadesApiResponseModel> {
-    return this.http.get<ListarAtividadesApiResponseModel>(this.apiUrl);
+  public cadastrar(
+    medicoModel: CadastrarAtividadeMedicaModel
+  ): Observable<CadastrarAtividadeMedicaResponseModel> {
+    return this.http
+      .post<RespostaApiModel>(this.apiUrl, medicoModel)
+      .pipe(map(mapearRespostaApi<CadastrarAtividadeMedicaResponseModel>));
   }
 
-  cadastrar(model: CadastrarAtividadeModel): Observable<any> {
-    return this.http.post(this.apiUrl, model);
+  public editar(
+    id: string,
+    editarAtividadeMedicaModel: EditarAtividadeMedicaModel
+  ): Observable<EditarAtividadeMedicaResponseModel> {
+    const urlCompleto = `${this.apiUrl}/${id}`;
+
+    return this.http
+      .put<RespostaApiModel>(urlCompleto, editarAtividadeMedicaModel)
+      .pipe(map(mapearRespostaApi<EditarAtividadeMedicaResponseModel>));
+  }
+
+  public excluir(id: string): Observable<null> {
+    const urlCompleto = `${this.apiUrl}/${id}`;
+
+    return this.http.delete<null>(urlCompleto);
+  }
+
+  public selecionarPorId(id: string): Observable<DetalhesAtividadeMedicaModel> {
+    const urlCompleto = `${this.apiUrl}/${id}`;
+
+    return this.http
+      .get<RespostaApiModel>(urlCompleto)
+      .pipe(map(mapearRespostaApi<DetalhesAtividadeMedicaModel>));
+  }
+
+  public selecionarTodos(): Observable<ListarAtividadesMedicasModel[]> {
+    return this.http.get<RespostaApiModel>(this.apiUrl).pipe(
+      map(mapearRespostaApi<ListarAtividadesMedicasApiResponseModel>),
+      map((res) => res.registros)
+    );
+  }
+
+  public selecionarPorTipoAtividade(
+    tipoAtividade: TipoAtividadeMedicaEnum
+  ): Observable<ListarAtividadesMedicasModel[]> {
+    const urlCompleto = `${this.apiUrl}?tipoAtividade=${tipoAtividade.toLowerCase()}`;
+
+    return this.http.get<RespostaApiModel>(urlCompleto).pipe(
+      map(mapearRespostaApi<ListarAtividadesMedicasApiResponseModel>),
+      map((res) => res.registros)
+    );
   }
 }

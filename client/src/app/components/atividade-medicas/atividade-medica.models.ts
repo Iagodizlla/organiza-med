@@ -1,41 +1,62 @@
-export enum TipoAtividadeMedica {
-  Consulta = 0,
-  Cirurgia = 1
-}
-
-export interface MedicoResumoModel {
-  id: string;
-  nome: string;
-}
-
-export interface PacienteResumoModel {
-  id: string;
-  nome: string;
-}
-
-export interface ListarAtividadesApiResponseModel {
+export interface ListarAtividadesMedicasApiResponseModel {
   quantidadeRegistros: number;
-  registros: ListarAtividadeModel[];
+  registros: ListarAtividadesMedicasModel[];
 }
 
-export interface ListarAtividadeModel {
+export interface ListarAtividadesMedicasModel {
   id: string;
-  tipoAtividade: TipoAtividadeMedica;
-  inicio: string;
-  termino?: string;
-  pacienteId: string;
-  pacienteNome?: string;
-  medicos: MedicoResumoModel[];
+  inicio: Date;
+  termino: Date;
+  tipoAtividade: TipoAtividadeMedicaEnum;
+  paciente: PacienteAtividadeMedicaModel;
+  medicos: MedicoAtividadeMedicaModel[];
 }
 
-export interface CadastrarAtividadeModel {
-  tipoAtividade: TipoAtividadeMedica;
-  inicio: string;
-  termino?: string;
-  pacienteId: string;
-  medicosIds: string[];
+export interface DetalhesAtividadeMedicaModel {
+  id: string;
+  inicio: Date;
+  termino: Date;
+  tipoAtividade: TipoAtividadeMedicaEnum;
+  paciente: PacienteAtividadeMedicaModel;
+  medicos: MedicoAtividadeMedicaModel[];
 }
 
-export interface CadastrarAtividadeResponseModel {
+export enum TipoAtividadeMedicaEnum {
+  Consulta = 'Consulta',
+  Cirurgia = 'Cirurgia',
+}
+
+export interface PacienteAtividadeMedicaModel {
+  id: string;
+  nome: string;
+  email: string;
+  telefone: string;
+}
+
+export interface MedicoAtividadeMedicaModel {
+  id: string;
+  nome: string;
+  crm: string;
+}
+
+export interface CadastrarAtividadeMedicaModel {
+  inicio: Date;
+  termino: Date;
+  tipoAtividade: TipoAtividadeMedicaEnum;
+  pacienteId: string;
+  medicos: string[];
+}
+
+export interface CadastrarAtividadeMedicaResponseModel {
+  id: string;
+}
+
+export interface EditarAtividadeMedicaModel {
+  inicio: Date;
+  termino: Date;
+  medicos: string[];
+}
+
+export interface EditarAtividadeMedicaResponseModel {
   id: string;
 }
