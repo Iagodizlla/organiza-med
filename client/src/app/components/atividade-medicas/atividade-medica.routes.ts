@@ -40,11 +40,11 @@ export const atividadeMedicaRoutes: Routes = [
         component: ListarAtividadesMedicas,
         resolve: { atividadesMedicas: listarAtividadesMedicasResolver },
       },
-      //{
-      //  path: 'cadastrar',
-      //  component: CadastrarAtividadeMedica,
-      //  resolve: { pacientes: listarPacientesResolver, medicos: listarMedicosResolver },
-      //},
+      {
+        path: 'cadastrar',
+        component: CadastrarAtividadeMedica,
+        resolve: { pacientes: listarPacientesResolver, medicos: listarMedicosResolver },
+      },
       //{
       //  path: 'editar/:id',
       //  component: EditarAtividadeMedica,
