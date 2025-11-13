@@ -17,5 +17,6 @@ import { RouterLink } from '@angular/router';
     RouterLink,
   ],
   templateUrl: './inicio.html',
+  styleUrl: './inicio.scss',
 })
 export class Inicio {}
