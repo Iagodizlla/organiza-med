@@ -20,7 +20,7 @@
             <mat-label>Início</mat-label>
             <input formControlName="inicio" matInput type="datetime" />
 
-            @if (inicio?.errors?.['required']) {
+            @if (inicio?.hasError('required')) {
             <mat-error>O início da atividade médica é obrigatório.</mat-error>
             }
           </mat-form-field>
@@ -42,7 +42,7 @@
               }
             </mat-select>
 
-            @if (tipoAtividade?.errors?.['required']) {
+            @if (tipoAtividade?.hasError('required')) {
             <mat-error>O tipo da atividade médica é obrigatório.</mat-error>
             }
           </mat-form-field>
@@ -55,7 +55,7 @@
               }
             </mat-select>
 
-            @if (pacienteId?.errors?.['required']) {
+            @if (pacienteId?.hasError('required')) {
             <mat-error>O paciente da atividade médica é obrigatório.</mat-error>
             }
           </mat-form-field>
