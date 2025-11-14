@@ -148,14 +148,14 @@ namespace OrganizaMed.Infraestrutura.Orm.Migrations
                     b.Property<bool>("ConfirmacaoEnviada")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("Inicio")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("Inicio")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("PacienteId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("Termino")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("Termino")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("TipoAtividade")
                         .HasColumnType("int");

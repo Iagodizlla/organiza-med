@@ -12,11 +12,11 @@ public class Cirurgia : AtividadeMedica
 
     protected Cirurgia() { }
 
-    public Cirurgia(DateTime inicio, DateTime? termino) : base(inicio, termino)
+    public Cirurgia(DateTimeOffset inicio, DateTimeOffset? termino) : base(inicio, termino)
     {
     }
 
-    public Cirurgia(DateTime inicio, DateTime? termino, List<Medico> medicos) : base(inicio, termino)
+    public Cirurgia(DateTimeOffset inicio, DateTimeOffset? termino, List<Medico> medicos) : base(inicio, termino)
     {
         foreach (var medico in medicos)
         {

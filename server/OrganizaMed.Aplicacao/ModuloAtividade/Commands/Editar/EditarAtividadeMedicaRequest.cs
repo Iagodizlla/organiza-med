@@ -5,7 +5,7 @@ namespace OrganizaMed.Aplicacao.ModuloAtividade.Commands.Editar;
 
 public record EditarAtividadeMedicaRequest(
     Guid Id,
-    DateTime Inicio,
-    DateTime Termino,
+     DateTimeOffset Inicio,
+    DateTimeOffset Termino,
     IEnumerable<Guid> Medicos
 ) : IRequest<Result<EditarAtividadeMedicaResponse>>;

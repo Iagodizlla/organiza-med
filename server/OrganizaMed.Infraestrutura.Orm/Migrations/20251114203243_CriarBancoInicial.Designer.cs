@@ -12,8 +12,8 @@ using OrganizaMed.Infraestrutura.Orm.Compartilhado;
 namespace OrganizaMed.Infraestrutura.Orm.Migrations
 {
     [DbContext(typeof(OrganizaMedDbContext))]
-    [Migration("20241223134418_ConfirmacaoEmail")]
-    partial class ConfirmacaoEmail
+    [Migration("20251114203243_CriarBancoInicial")]
+    partial class CriarBancoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -151,14 +151,14 @@ namespace OrganizaMed.Infraestrutura.Orm.Migrations
                     b.Property<bool>("ConfirmacaoEnviada")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("Inicio")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("Inicio")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("PacienteId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("Termino")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("Termino")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("TipoAtividade")
                         .HasColumnType("int");

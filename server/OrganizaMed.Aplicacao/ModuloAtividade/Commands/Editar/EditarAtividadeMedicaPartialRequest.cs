@@ -4,7 +4,7 @@ using MediatR;
 namespace OrganizaMed.Aplicacao.ModuloAtividade.Commands.Editar;
 
 public record EditarAtividadeMedicaPartialRequest(
-    DateTime Inicio,
-    DateTime Termino,
+    DateTimeOffset Inicio,
+    DateTimeOffset Termino,
     IEnumerable<Guid> Medicos
 ) : IRequest<Result<EditarAtividadeMedicaResponse>>;

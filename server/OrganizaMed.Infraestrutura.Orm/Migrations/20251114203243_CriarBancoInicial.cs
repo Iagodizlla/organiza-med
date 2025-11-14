@@ -1,29 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace OrganizaMed.Infraestrutura.Orm.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAuth : Migration
+    public partial class CriarBancoInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<Guid>(
-                name: "UsuarioId",
-                table: "TBMedico",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "UsuarioId",
-                table: "TBAtividadeMedica",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -169,15 +156,96 @@ namespace OrganizaMed.Infraestrutura.Orm.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_TBMedico_UsuarioId",
-                table: "TBMedico",
-                column: "UsuarioId");
+            migrationBuilder.CreateTable(
+                name: "TBMedico",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Crm = table.Column<string>(type: "char(8)", nullable: false),
+                    UsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TBMedico", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TBMedico_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_TBAtividadeMedica_UsuarioId",
-                table: "TBAtividadeMedica",
-                column: "UsuarioId");
+            migrationBuilder.CreateTable(
+                name: "TBPaciente",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Cpf = table.Column<string>(type: "char(14)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Telefone = table.Column<string>(type: "varchar(15)", nullable: false),
+                    UsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TBPaciente", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TBPaciente_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TBAtividadeMedica",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PacienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Inicio = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    Termino = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    ConfirmacaoEnviada = table.Column<bool>(type: "bit", nullable: false),
+                    TipoAtividade = table.Column<int>(type: "int", nullable: false),
+                    UsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TBAtividadeMedica", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TBAtividadeMedica_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TBAtividadeMedica_TBPaciente_PacienteId",
+                        column: x => x.PacienteId,
+                        principalTable: "TBPaciente",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TBAtividadeMedica_TBMedico",
+                columns: table => new
+                {
+                    AtividadesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MedicosId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TBAtividadeMedica_TBMedico", x => new { x.AtividadesId, x.MedicosId });
+                    table.ForeignKey(
+                        name: "FK_TBAtividadeMedica_TBMedico_TBAtividadeMedica_AtividadesId",
+                        column: x => x.AtividadesId,
+                        principalTable: "TBAtividadeMedica",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TBAtividadeMedica_TBMedico_TBMedico_MedicosId",
+                        column: x => x.MedicosId,
+                        principalTable: "TBMedico",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -218,32 +286,35 @@ namespace OrganizaMed.Infraestrutura.Orm.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_TBAtividadeMedica_AspNetUsers_UsuarioId",
+            migrationBuilder.CreateIndex(
+                name: "IX_TBAtividadeMedica_PacienteId",
                 table: "TBAtividadeMedica",
-                column: "UsuarioId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id");
+                column: "PacienteId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_TBMedico_AspNetUsers_UsuarioId",
+            migrationBuilder.CreateIndex(
+                name: "IX_TBAtividadeMedica_UsuarioId",
+                table: "TBAtividadeMedica",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TBAtividadeMedica_TBMedico_MedicosId",
+                table: "TBAtividadeMedica_TBMedico",
+                column: "MedicosId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TBMedico_UsuarioId",
                 table: "TBMedico",
-                column: "UsuarioId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id");
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TBPaciente_UsuarioId",
+                table: "TBPaciente",
+                column: "UsuarioId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_TBAtividadeMedica_AspNetUsers_UsuarioId",
-                table: "TBAtividadeMedica");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_TBMedico_AspNetUsers_UsuarioId",
-                table: "TBMedico");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -260,26 +331,22 @@ namespace OrganizaMed.Infraestrutura.Orm.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "TBAtividadeMedica_TBMedico");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "TBAtividadeMedica");
+
+            migrationBuilder.DropTable(
+                name: "TBMedico");
+
+            migrationBuilder.DropTable(
+                name: "TBPaciente");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropIndex(
-                name: "IX_TBMedico_UsuarioId",
-                table: "TBMedico");
-
-            migrationBuilder.DropIndex(
-                name: "IX_TBAtividadeMedica_UsuarioId",
-                table: "TBAtividadeMedica");
-
-            migrationBuilder.DropColumn(
-                name: "UsuarioId",
-                table: "TBMedico");
-
-            migrationBuilder.DropColumn(
-                name: "UsuarioId",
-                table: "TBAtividadeMedica");
         }
     }
 }

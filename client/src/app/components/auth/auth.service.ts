@@ -12,7 +12,7 @@ import {
 } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { mapearRespostaApi, RespostaApiModel } from '../../util/mapear-resposta-api';
@@ -20,7 +20,6 @@ import { AccessTokenModel, LoginModel, RegistroModel } from './auth.models';
 
 @Injectable()
 export class AuthService {
-  private readonly platformId = inject(PLATFORM_ID);
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl + '/auth';
   private readonly chaveAccessToken: string = 'organiza-med:access-token';
@@ -34,7 +33,7 @@ export class AuthService {
 
     if (!accessToken) return of(undefined);
 
-    const valido = new Date(accessToken.expiracao) > new Date(); // DateTime.Now
+    const valido = new Date(accessToken.dataExpiracao) > new Date();
 
     if (!valido) return of(undefined);
 
@@ -45,11 +44,9 @@ export class AuthService {
     this.accessTokenArmazenado$,
     this.accessTokenSubject$.pipe(skip(1))
   ).pipe(
-    distinctUntilChanged((a, b) => a === b),
+    distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
     tap((accessToken) => {
       if (accessToken) this.salvarAccessToken(accessToken);
-      else this.limparAccessToken();
-
       this.accessTokenSubject$.next(accessToken);
     }),
     shareReplay({ bufferSize: 1, refCount: true })

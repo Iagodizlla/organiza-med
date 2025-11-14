@@ -13,11 +13,9 @@ public class MapeadorAtividadeMedicaEmOrm : IEntityTypeConfiguration<AtividadeMe
         modelBuilder.Property(x => x.Id).ValueGeneratedNever();
 
         modelBuilder.Property(x => x.Inicio)
-            .HasColumnType("datetime2")
             .IsRequired();
 
         modelBuilder.Property(x => x.Termino)
-            .HasColumnType("datetime2")
             .IsRequired(false);
 
         modelBuilder.Property(x => x.ConfirmacaoEnviada)

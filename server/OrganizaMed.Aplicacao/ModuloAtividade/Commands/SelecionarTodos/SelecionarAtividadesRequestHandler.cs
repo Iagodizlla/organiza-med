@@ -15,18 +15,12 @@ public class SelecionarAtividadesRequestHandler(
     {
         IEnumerable<AtividadeMedica> registrosFiltrados;
         
-        switch (request.TipoAtividade)
+        registrosFiltrados = request.TipoAtividade switch
         {
-            case TipoAtividadeMedica.Consulta:
-                registrosFiltrados = await repositorioAtividadeMedica.SelecionarConsultasAsync();
-                break;
-            case TipoAtividadeMedica.Cirurgia:
-                registrosFiltrados = await repositorioAtividadeMedica.SelecionarCirurgiasAsync();
-                break;
-            default:
-                registrosFiltrados = await repositorioAtividadeMedica.SelecionarTodosAsync();
-                break;
-        }
+            TipoAtividadeMedica.Consulta => await repositorioAtividadeMedica.SelecionarConsultasAsync(),
+            TipoAtividadeMedica.Cirurgia => await repositorioAtividadeMedica.SelecionarCirurgiasAsync(),
+            _ => await repositorioAtividadeMedica.SelecionarTodosAsync()
+        };
 
         var response = new SelecionarAtividadesMedicasResponse
         {
@@ -35,15 +29,17 @@ public class SelecionarAtividadesRequestHandler(
                 a.Id,
                 new SelecionarPacienteAtividadeDto(
                     a.PacienteId,
-                    a.Paciente.Nome, 
-                    a.Paciente.Email,
-                    a.Paciente.Telefone
+                    a.Paciente?.Nome ?? "",
+                    a.Paciente?.Email ?? "",
+                    a.Paciente?.Telefone ?? ""
                 ),
                 a.Inicio,
                 a.Termino,
                 a.TipoAtividade,
-                a.Medicos.Select(m => new SelecionarMedicosDto(m.Id, m.Nome, m.Crm)))
-            )
+                a.Medicos.Select(m =>
+                    new SelecionarMedicosDto(m.Id, m.Nome, m.Crm)
+                )
+            ))
         };
 
         return Result.Ok(response);

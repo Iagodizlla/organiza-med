@@ -12,11 +12,11 @@ public class Consulta : AtividadeMedica
 
     protected Consulta() { }
 
-    public Consulta(DateTime inicio, DateTime? termino) : base(inicio, termino)
+    public Consulta(DateTimeOffset inicio, DateTimeOffset? termino) : base(inicio, termino)
     {
     }
 
-    public Consulta(DateTime inicio, DateTime? termino, Medico medico) : base(inicio, termino)
+    public Consulta(DateTimeOffset inicio, DateTimeOffset? termino, Medico medico) : base(inicio, termino)
     {
         Medicos.Add(medico);
         medico.RegistrarAtividade(this);
