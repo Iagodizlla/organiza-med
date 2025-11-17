@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  apiUrl: '',
+  production: true,
+  apiUrl: 'https://organiza-med-zlla-api-eyduhdc6ambjedaf.brazilsouth-01.azurewebsites.net',
 };
