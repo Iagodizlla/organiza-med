@@ -6,6 +6,7 @@ import { EditarMedico } from './editar/editar-medico';
 import { ExcluirMedico } from './excluir/excluir-medico';
 import { ListarMedicos } from './listar/listar-medicos';
 import { MedicoService } from './medico.service';
+import { Top10Medicos } from './top-10-medicos/top-10-medicos';
 
 export const listarMedicosResolver = () => {
   return inject(MedicoService).selecionarTodos();
@@ -38,12 +39,16 @@ export const medicoRoutes: Routes = [
         path: 'editar/:id',
         component: EditarMedico,
         resolve: { medico: detalhesMedicoResolver },
-     },
-     {
-       path: 'excluir/:id',
-       component: ExcluirMedico,
-       resolve: { medico: detalhesMedicoResolver },
-     },
+      },
+      {
+        path: 'excluir/:id',
+        component: ExcluirMedico,
+        resolve: { medico: detalhesMedicoResolver },
+      },
+      {
+        path: 'top-10',
+        component: Top10Medicos,
+      },
     ],
     providers: [MedicoService],
   },

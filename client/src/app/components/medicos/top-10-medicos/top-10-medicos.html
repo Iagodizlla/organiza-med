@@ -1,0 +1,59 @@
+<section class="mx-auto max-w-screen-xl px-4">
+  <div class="py-6">
+    <h2 class="text-2xl font-semibold">Top 10 Médicos Mais Ativos</h2>
+
+    <mat-card class="p-4 rounded-2xl shadow-sm mt-6">
+      <form [formGroup]="filtroForm">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+          <mat-form-field appearance="fill">
+            <mat-label>Início do Período</mat-label>
+            <input type="date" formControlName="inicio" matInput />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Fim do Período</mat-label>
+            <input type="date" formControlName="fim" matInput />
+          </mat-form-field>
+
+          <button
+            mat-flat-button
+            class="h-14 mt-2"
+            (click)="buscar()"
+            type="button"
+          >
+            Buscar
+          </button>
+
+        </div>
+      </form>
+    </mat-card>
+
+    <hr class="my-6 border-muted/30" />
+
+    @if (carregando) {
+      <p class="text-lg">Carregando...</p>
+    }
+
+    @if (top10$ | async; as medicos) {
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        @for (m of (top10$ | async); track $index) {
+          <mat-card class="p-3 rounded-2xl shadow-sm">
+            <mat-card-header class="pb-2">
+              <mat-card-title class="text-lg font-medium">
+                {{ m.medico }}
+              </mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content class="min-h-[40px] mt-3">
+              <p>
+                <span class="font-medium">Total de Horas:</span>
+                {{ m.totalDeHorasTrabalhadas }}
+              </p>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  </div>
+</section>

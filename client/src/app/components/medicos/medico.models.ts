@@ -33,3 +33,14 @@ export interface EditarMedicoResponseModel {
   nome: string;
   crm: string;
 }
+
+export interface MedicosMaisAtivosResponse {
+  quantidadeRegistros: number;
+  registros: MedicoAtivo[];
+}
+
+export interface MedicoAtivo {
+  medicoId: number;
+  medico: string;
+  totalDeHorasTrabalhadas: number;
+}

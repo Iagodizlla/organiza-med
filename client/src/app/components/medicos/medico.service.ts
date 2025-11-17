@@ -13,6 +13,8 @@ import {
   EditarMedicoResponseModel,
   ListarMedicosApiResponseModel,
   ListarMedicosModel,
+  MedicosMaisAtivosResponse,
+  MedicoAtivo
 } from './medico.models';
 
 @Injectable()
@@ -39,7 +41,6 @@ export class MedicoService {
 
   public excluir(id: string): Observable<null> {
     const urlCompleto = `${this.apiUrl}/${id}`;
-
     return this.http.delete<null>(urlCompleto);
   }
 
@@ -56,5 +57,22 @@ export class MedicoService {
       map(mapearRespostaApi<ListarMedicosApiResponseModel>),
       map((res) => res.registros)
     );
+  }
+
+  public selecionarTop10(
+    inicioPeriodo: string,
+    terminoPeriodo: string
+  ): Observable<MedicoAtivo[]> {
+    const url = `${this.apiUrl}/top-10`;
+
+    return this.http
+      .get<RespostaApiModel>(url, {
+        params: {
+          inicioPeriodo,
+          terminoPeriodo,
+        },
+      })
+      .pipe(map(mapearRespostaApi<MedicosMaisAtivosResponse>))
+      .pipe(map((res) => res.registros));
   }
 }
