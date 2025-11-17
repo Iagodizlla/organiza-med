@@ -26,10 +26,10 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build ./server/OrganizaMed-WebApi --configuration Release
+        run: dotnet build ./server/OrganizaMed.WebApi --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish ./server/OrganizaMed-WebApi -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish ./server/OrganizaMed.WebApi -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
