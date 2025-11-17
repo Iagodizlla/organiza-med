@@ -26,6 +26,8 @@ public class Program
         builder.Services.ConfigureIdentityProviders();
         builder.Services.ConfigureJwtAuthentication(builder.Configuration);
 
+        builder.Services.ConfigureOptions<CorsConfig>().AddCors();
+
         // Controllers
         builder.Services.ConfigureControllersWithFilters();
 
