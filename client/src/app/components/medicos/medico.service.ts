@@ -20,7 +20,7 @@ import {
 @Injectable()
 export class MedicoService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = environment.apiUrl + '/medicos';
+  private readonly apiUrl = environment.apiUrl + '/api/medicos';
 
   public cadastrar(medicoModel: CadastrarMedicoModel): Observable<CadastrarMedicoResponseModel> {
     return this.http

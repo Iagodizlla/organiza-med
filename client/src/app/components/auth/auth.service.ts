@@ -21,7 +21,7 @@ import { AccessTokenModel, LoginModel, RegistroModel } from './auth.models';
 @Injectable()
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = environment.apiUrl + '/auth';
+  private readonly apiUrl = environment.apiUrl + '/api/auth';
   private readonly chaveAccessToken: string = 'organiza-med:access-token';
 
   public readonly accessTokenSubject$ = new BehaviorSubject<AccessTokenModel | undefined>(

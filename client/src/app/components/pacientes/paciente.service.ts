@@ -14,7 +14,7 @@ import {
 @Injectable()
 export class PacienteService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = environment.apiUrl + '/pacientes';
+  private readonly apiUrl = environment.apiUrl + '/api/pacientes';
 
   public cadastrar(
     medicoModel: CadastrarPacienteModel
